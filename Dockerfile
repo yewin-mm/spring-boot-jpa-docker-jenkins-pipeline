@@ -59,7 +59,7 @@ FROM eclipse-temurin:11-jre-alpine
 WORKDIR /opt/app
 
 # you can define static jar file name with `<finalName>` tag inside `<build>` tag in `pom.xml` file.
-COPY target/spring-boot-jenkins-pipeline-docker.jar  app.jar
+COPY target/spring-boot-jpa-docker-jenkins-pipeline.jar  app.jar
 
 # below copy command is use when you genereate jar file with maven in docker container.
 # from `builder` is from above step which we gave the name to `builder`

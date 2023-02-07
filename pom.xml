@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>pers.yewin</groupId>
-    <artifactId>spring-boot-jenkins-pipeline-docker</artifactId>
+    <artifactId>spring-boot-jpa-docker-jenkins-pipeline</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>spring-boot-jenkins-pipeline-docker</name>
-    <description>spring-boot-jenkins-pipeline-docker</description>
+    <name>spring-boot-jpa-docker-jenkins-pipeline</name>
+    <description>spring-boot-jpa-docker-jenkins-pipeline</description>
     <properties>
         <java.version>1.8</java.version>
     </properties>
@@ -56,7 +56,7 @@
     </dependencies>
 
     <build>
-        <finalName>spring-boot-jenkins-pipeline-docker</finalName>
+        <finalName>spring-boot-jpa-docker-jenkins-pipeline</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
