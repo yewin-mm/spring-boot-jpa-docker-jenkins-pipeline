@@ -3,7 +3,7 @@
 
 
 #------------------------------------------------------------------
-### Below is to generate jar file with docker.
+### Below is to automatic generate jar file with docker, so that you don't need to generate jar file, you just need docker build and docker run commands.
 ### Here, you don't need to generate jar file as Jenkin pipeline will generate jar file.
 #------------------------------------------------------------------
 
@@ -11,7 +11,10 @@
 # 1. using maven image,
 # 2. copying .mvn folder
 
-#1.
+## is comment out for definition
+# is code that you can uncomment and can test it without manual typing `mvn clean package` in your CMD or terminal
+
+##1.
 ## pull maven image from DockerHub to run mvn command and give that name as builder to use in next step, you can give any name you want (here, I used multi-stage build which is better way using docker)
 #FROM maven:3.8.7-eclipse-temurin-11-alpine as builder
 ## create folder (if not existed) and define working folder inside container
@@ -21,9 +24,9 @@
 ## generate jar file by using maven which we already add maven image in above, (you can use `mvn clean install -DskipTests`) (this step will take a few minutes)
 #RUN mvn clean package -DskipTests
 
-# you can find more about maven image tag versions in here, https://github.com/docker-library/docs/tree/master/maven
+## you can find more about maven image tag versions in here, https://github.com/docker-library/docs/tree/master/maven
 
-#2.
+##2.
 ## pull jdk for java which to run maven command and give that name as builder to use in next step, you can give any name you want (here, I used multi-stage build which is better way using docker)
 #FROM eclipse-temurin:11-jdk-alpine as builder
 ## create folder (if not existed) and define working folder inside container
@@ -58,7 +61,7 @@ FROM eclipse-temurin:11-jre-alpine
 # set working directory
 WORKDIR /opt/app
 
-# you can define static jar file name with `<finalName>` tag inside `<build>` tag in `pom.xml` file.
+## you can define static jar file name without snapshot version with `<finalName>` tag inside `<build>` tag in `pom.xml` file.
 COPY target/spring-boot-jpa-docker-jenkins-pipeline.jar  app.jar
 
 # below copy command is use when you genereate jar file with maven in docker container.
