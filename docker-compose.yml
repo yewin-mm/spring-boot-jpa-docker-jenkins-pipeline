@@ -1,6 +1,9 @@
 version: "3.9"
 services:
   app:
-    build: .
-    ports:
-      - "8080:8080"
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+          - IMAGE_NAME=${DOCKER_IMAGE_NAME}
+          # I will inject above image name with my custom image name from jenkins pipeline
