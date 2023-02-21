@@ -272,9 +272,10 @@ pipeline {
         stage('Building image') {
             steps {
                 echo "application full build path and tag: ${dockerImage}"
-                script {
-                    docImage = docker.build dockerImage
-                }
+//                 script {
+//                     docImage = docker.build dockerImage
+//                 }
+                sh "docker-compose build --build-arg DOCKER_IMAGE_NAME=${imageName}"
             }
         }
 

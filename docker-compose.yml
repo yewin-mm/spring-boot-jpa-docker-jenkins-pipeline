@@ -7,3 +7,10 @@ services:
       args:
           - IMAGE_NAME=${DOCKER_IMAGE_NAME}
           # I will inject above image name with my custom image name from jenkins pipeline
+
+    networks:
+      - mysql
+
+networks:
+  mysql:
+    external: true
