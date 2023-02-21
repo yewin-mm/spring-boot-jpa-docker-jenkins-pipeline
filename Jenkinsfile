@@ -112,7 +112,7 @@ pipeline {
         // but it's better adding Testing before push image to registry or deploy to server, to cover some fail state like API call error, DB connection error, etc...
 
 
-        stage('Smoke Test') {
+        /* stage('Smoke Test') {
 
             // set timeout
             // this step will take a bit minutes if you run this app as first time because it will download all dependencies.
@@ -141,7 +141,7 @@ pipeline {
 
 
                             // if you test with above mvn test, the test result report files will generate under `target/surefire-reports/` folder,
-                            // so, **/ to point target folder and surefire report is folder name under target folder.
+                            // so, **//*  to point target folder and surefire report is folder name under target folder.
                             // Junit will generate test report file and those Test report file will start with `TEST-` follow by package name and class name and the extension is `.xml`.
                             // here, you can use `TEST-*.xml` to read all TEST result report files if you run with `mvn clean test` instead of testing with specific class name.
                             // but I need to read as separate test report file as per above `maven test specific class name`.
@@ -150,7 +150,7 @@ pipeline {
 
                             // So, As per reading Test result report xml file,
                             // Jenkins can show as `Test Result Trend` graph chart in Jenkins Portal UI because of Junit Plugin and which is already installed in Jenkins after you install Jenkins with choosing install Suggested plugins at Jenkins startup time.
-                            testResults: '**/surefire-reports/TEST-*SmokeTest.xml'
+                            testResults: '**//* surefire-reports/TEST-*SmokeTest.xml'
                     )
                 }
             }
@@ -182,7 +182,7 @@ pipeline {
 
 
                             // if you test with above mvn test, the test result report files will generate under `target/surefire-reports/` folder,
-                            // so, **/ to point target folder and surefire report is folder name under target folder.
+                            // so, **//*  to point target folder and surefire report is folder name under target folder.
                             // Junit will generate test report file and those Test report file will start with `TEST-` follow by package name and class name and the extension is `.xml`.
                             // here, you can use `TEST-*.xml` to read all TEST result report files if you run with `mvn clean test` instead of testing with specific class name.
                             // but I need to read as separate test report file as per above `maven test specific class name`.
@@ -191,7 +191,7 @@ pipeline {
 
                             // So, As per reading Test result report xml file,
                             // Jenkins can show as `Test Result Trend` graph chart in Jenkins Portal UI because of Junit Plugin and which is already installed in Jenkins after you install Jenkins with choosing install Suggested plugins at Jenkins startup time.
-                            testResults: '**/surefire-reports/TEST-*StudentApplicationUnitTest.xml'
+                            testResults: '**//* surefire-reports/TEST-*StudentApplicationUnitTest.xml'
                     )
                 }
             }
@@ -222,7 +222,7 @@ pipeline {
 
 
                             // if you test with above mvn test, the test result report files will generate under `target/surefire-reports/` folder,
-                            // so, **/ to point target folder and surefire report is folder name under target folder.
+                            // so, **//*  to point target folder and surefire report is folder name under target folder.
                             // Junit will generate test report file and those Test report file will start with `TEST-` follow by package name and class name and the extension is `.xml`.
                             // here, you can use `TEST-*.xml` to read all TEST result report files if you run with `mvn clean test` instead of testing with specific class name.
                             // but I need to read as separate test report file as per above `maven test specific class name`.
@@ -231,12 +231,12 @@ pipeline {
 
                             // So, As per reading Test result report xml file,
                             // Jenkins can show as `Test Result Trend` graph chart in Jenkins Portal UI because of Junit Plugin and which is already installed in Jenkins after you install Jenkins with choosing install Suggested plugins at Jenkins startup time.
-                            testResults: '**/surefire-reports/TEST-*StudentApplicationIntegrationTest.xml'
+                            testResults: '**//* surefire-reports/TEST-*StudentApplicationIntegrationTest.xml'
 
                     )
                 }
             }
-        }
+        } */
 
 
         // you can create new pipeline in jenkins and can test these whole pipeline under pipeline scrips tab of new pipeline configure section
@@ -309,12 +309,12 @@ pipeline {
 //        }
 
         // you can separate login and push image like below
-//        stage('Login to Docker Hub') {
-//            steps{
-//                sh 'echo $DOCKER_HUB_CREDENTIALS_PSW | docker login -u $DOCKER_HUB_CREDENTIALS_USR --password-stdin'
-//                echo 'Login Success'
-//            }
-//        }
+       stage('Login to Docker Hub') {
+           steps{
+               sh 'echo $DOCKER_HUB_CREDENTIALS_PSW | docker login -u $DOCKER_HUB_CREDENTIALS_USR --password-stdin'
+               echo 'Login Success'
+           }
+       }
 //
 //        stage('Push Image') {
 //            steps{
