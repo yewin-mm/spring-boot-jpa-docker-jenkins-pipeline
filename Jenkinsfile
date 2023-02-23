@@ -5,11 +5,16 @@ def readPom
 // below variable is repository name which you need to define in your registry server. eg. docker hub. (ref - https://github.com/yewin-mm/jenkins-server#docker)
 def repository = "spring-boot-jpa-docker-jenkins-pipeline"
 
+def userId = "yewin1"
+
 // below variable is imageName which we will get from `artifactId` of `pom.xml` file which we will use in docker build and push
 def imageName
 
+// we will define tagname in below variable
+def tagName
+
 // we will set full path to push into docker hub in below checkout stage (registry url + repository + image name + tag version)
-def dockerImage
+def dockerPushPackage
 
 def docImage
 
@@ -88,10 +93,14 @@ pipeline {
                     readPom = readMavenPom file: 'pom.xml';
 
                     // set value into imageName variable which we declare in above
-                    imageName = "${readPom.artifactId}";
+//                     imageName = "${userId}/${repository}/${readPom.artifactId}:${env.AUTOMATIC_TAG}";
+                    imageName = "${readPom.artifactId}:${env.AUTOMATIC_TAG}";
+//                     imageName = "${userId}/${readPom.artifactId}:${env.AUTOMATIC_TAG}";
 
                     // prepare for docker image with full path to push into docker hub
-                    dockerImage = "${env.REGISTRY}/${repository}/${imageName}:${env.AUTOMATIC_TAG}"
+//                     dockerPushPackage = "${env.REGISTRY}/${userId}/${repository}/${readPom.artifactId}:${env.AUTOMATIC_TAG}";
+                    tagName = "${repository}:${env.AUTOMATIC_TAG}";
+                    dockerPushPackage = "${tagName}";
 
                 }
 
@@ -112,7 +121,7 @@ pipeline {
         // but it's better adding Testing before push image to registry or deploy to server, to cover some fail state like API call error, DB connection error, etc...
 
 
-        /* stage('Smoke Test') {
+         stage('Smoke Test') {
 
             // set timeout
             // this step will take a bit minutes if you run this app as first time because it will download all dependencies.
@@ -236,7 +245,7 @@ pipeline {
                     )
                 }
             }
-        } */
+        }
 
 
         // you can create new pipeline in jenkins and can test these whole pipeline under pipeline scrips tab of new pipeline configure section
@@ -271,32 +280,40 @@ pipeline {
 
         stage('Building image') {
             steps {
-                echo "application full build path and tag: ${dockerImage}"
+
+                echo "application full build path and tag: ${dockerPushPackage}"
 //                 script {
-//                     docImage = docker.build dockerImage
+//                     docImage = docker.build dockerPushPackage
 //                 }
-                sh "docker-compose build --build-arg DOCKER_IMAGE_NAME=${imageName}"
+                sh "DOCKER_IMAGE_NAME=${imageName} docker-compose build --no-cache"
             }
         }
 
-        stage('Push Image') {
-            options {
-                timeout(time: 30, unit: "MINUTES")
-            }
+         stage('Login to Docker Hub') {
+           steps{
+               sh 'echo $DOCKER_HUB_CREDENTIALS_PSW | docker login -u $DOCKER_HUB_CREDENTIALS_USR --password-stdin'
+               echo 'Login Success'
+           }
+       }
 
-            steps {
-                echo 'Start Push Image process'
-                withCredentials([usernamePassword(credentialsId: 'docker-hub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-                    sh "echo $PASSWORD | docker login -u $USERNAME --password-stdin"
-                    sh "echo login success"
+        // stage('Push Image') {
+        //     options {
+        //         timeout(time: 30, unit: "MINUTES")
+        //     }
 
-                    // get full path from global variable which we prepare in checkout stage
-                    sh "docker push $docImage"
-                    sh "echo push success"
-                }
-                echo 'End Push Image process'
-            }
-        }
+        //     steps {
+        //         echo 'Start Push Image process'
+        //         withCredentials([usernamePassword(credentialsId: 'docker-hub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+        //             sh "echo $PASSWORD | docker login -u $USERNAME --password-stdin"
+        //             sh "echo login success"
+
+        //             // get full path from global variable which we prepare in checkout stage
+        //             sh "docker push $dockerPushPackage"
+        //             sh "echo push success"
+        //         }
+        //         echo 'End Push Image process'
+        //     }
+        // }
 
 //        stage('Push Image') {
 //            steps{
@@ -309,19 +326,21 @@ pipeline {
 //        }
 
         // you can separate login and push image like below
-       stage('Login to Docker Hub') {
-           steps{
-               sh 'echo $DOCKER_HUB_CREDENTIALS_PSW | docker login -u $DOCKER_HUB_CREDENTIALS_USR --password-stdin'
-               echo 'Login Success'
-           }
-       }
-//
-//        stage('Push Image') {
+//        stage('Login to Docker Hub') {
 //            steps{
-        // get full path from global variable which we prepare in checkout stage
-//                sh "docker push $dockerImage"
+//                sh 'echo $DOCKER_HUB_CREDENTIALS_PSW | docker login -u $DOCKER_HUB_CREDENTIALS_USR --password-stdin'
+//                echo 'Login Success'
 //            }
 //        }
+//
+       stage('Push Image') {
+           steps{
+               sh "docker tag ${imageName} ${tagName}"
+               // get full path from global variable which we prepare in checkout stage and push that to docker hub.
+               // we need to create repository in docker hub and bind with that secret token value to jenkins credentials as `docker-hub` id.
+               sh "docker push $dockerPushPackage"
+           }
+       }
 
 //        stage('Remove Unused docker image') {
 //            steps{
