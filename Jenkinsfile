@@ -86,6 +86,8 @@ pipeline {
         git branch: 'master', url: 'https://github.com/yewin-mm/spring-boot-jpa-docker-jenkins-pipeline'
 
         // you can use git clone command and checkout scmGit (install git plugin) instead of above git command
+        // you need git checkout command if you don't want to specify the branch and run with Multibranch pipeline approach in Jenkins server.
+        // but here, I do simpler way and don't use with multiple branch so, I go with git branch command.
 
         // we used script tag to create variable and call function
         script {
