@@ -1,3 +1,5 @@
+/* declarative pipeline */
+
 // declare variable as global (not declare in script tag) to use in other stages
 // below variable is to store values from pom.xml
 def readPom
@@ -351,5 +353,11 @@ pipeline {
     // you can add post to catch `failure` like post { failure ... } or to catch `success` like post { success ... }
     // and can send as email notification to you and your team.
 
+    // you can deploy (run) to your local tomcat server or run with docker container.
+
+    // you can also pushed image to your private cloud registry server and you can even deploy this application to Cloud server if you have Cloud server eg. AWS EC2.
+
+    // You can add more stages to separate deploy environment like `developer`, `qa`, `staging`, `production`, etc..
+    // So, Jenkins can automatic building, pushing, deploying your application with single click by using powerful pipeline.
   }
 }

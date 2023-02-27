@@ -1,6 +1,10 @@
 version: "3.9"
 services:
   app:
+
+    # if you don't run your db with this way ((https://github.com/yewin-mm/mysql-docker-container),
+    # you need to comment out below networks, mysql tag and comment out below networks, mysql and external
+
     # add to existing mysql network to connect my local mysql db container
     networks:
       - mysql
@@ -14,6 +18,8 @@ services:
     image: ${DOCKER_IMAGE_NAME}
 
 
+# if you don't run your db with this way ((https://github.com/yewin-mm/mysql-docker-container),
+# you need to comment out below networks, mysql and external
 networks:
   mysql:
     external: true
